@@ -8,6 +8,11 @@ const server=http.createServer(app);
 const wss=new WebSocket.Server({server,path:'/ws'});
 const PORT=process.env.PORT||10000;
 app.use(express.static(path.join(__dirname,'public')));
+app.get('/', (req,res)=>{
+  const publicIndex=path.join(__dirname,'public','index.html');
+  const rootIndex=path.join(__dirname,'index.html');
+  res.sendFile(require('fs').existsSync(publicIndex)?publicIndex:rootIndex);
+});
 app.get('/health',(req,res)=>res.json({ok:true,rooms:Object.keys(rooms).length}));
 const rooms=new Map();
 const ING={egg:['卵',1],sugar:['砂糖',1],soy:['しょうゆ',1],rice:['米',2],tomato:['トマト',1],oil:['油',1],beef:['牛肉',3],onion:['たまねぎ',1],pork:['豚肉',2],chicken:['鶏肉',2],lettuce:['レタス',1],bread:['パン',2],cheese:['チーズ',2],potato:['じゃがいも',1],carrot:['にんじん',1],fish:['魚',2],butter:['バター',1]};
